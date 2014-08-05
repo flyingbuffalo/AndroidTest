@@ -1,0 +1,5 @@
+ColorsAndFontsPreferencePage.expandedCategories=Torg.eclipse.ui.workbenchMisc
+ColorsAndFontsPreferencePage.selectedElement=Forg.eclipse.ui.workbench.texteditor.blockSelectionModeFont
+eclipse.preferences.version=1
+org.eclipse.jface.textfont=1|Monaco|13.0|0|COCOA|1|Monaco;
+org.eclipse.ui.workbench.texteditor.blockSelectionModeFont=1|Monaco|13.0|0|COCOA|1|Monaco;
