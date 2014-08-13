@@ -1,3 +1,1 @@
-INDEX VERSION 1.126+/Users/hanter/Programming/OSS/AndroidTest/.metadata/.plugins/org.eclipse.jdt.core
-1950416427.index
-382173527.index
+INDEX VERSION 1.126+/Users/kimhyewon/Project/OSS_2014/AndroidTest/.metadata/.plugins/org.eclipse.jdt.core
