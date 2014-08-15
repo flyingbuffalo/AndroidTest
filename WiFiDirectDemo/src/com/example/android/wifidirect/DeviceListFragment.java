@@ -40,6 +40,9 @@ import java.util.List;
  * A ListFragment that displays available peers on discovery and requests the
  * parent activity to handle user interaction events
  */
+
+//THISIS PeerListListener
+/** Interface for callback invocation when peer list is available */
 public class DeviceListFragment extends ListFragment implements PeerListListener {
 
     private List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
@@ -68,22 +71,25 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     }
 
     private static String getDeviceStatus(int deviceStatus) {
-        Log.d(WiFiDirectActivity.TAG, "Peer status :" + deviceStatus);
+    	String statusString;
         switch (deviceStatus) {
             case WifiP2pDevice.AVAILABLE:
-                return "Available";
+            	statusString = "Available";
             case WifiP2pDevice.INVITED:
-                return "Invited";
+            	statusString = "Invited";
             case WifiP2pDevice.CONNECTED:
-                return "Connected";
+            	statusString = "Connected";
             case WifiP2pDevice.FAILED:
-                return "Failed";
+            	statusString = "Failed";
             case WifiP2pDevice.UNAVAILABLE:
-                return "Unavailable";
+            	statusString = "Unavailable";
             default:
-                return "Unknown";
+            	statusString = "Unknown";
 
         }
+        
+        Log.d(WiFiDirectActivity.TAG, "Peer status :" + statusString);
+        return statusString;
     }
 
     /**
@@ -152,6 +158,7 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
         view.setText(getDeviceStatus(device.status));
     }
 
+    //THISIS BraodcastReceiver에서 피어 변화가 있을시 호출됨
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peerList) {
         if (progressDialog != null && progressDialog.isShowing()) {

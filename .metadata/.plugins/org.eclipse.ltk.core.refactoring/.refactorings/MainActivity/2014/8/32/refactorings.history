@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 2 elements to &apos;EffectiveNavigation/src/com.example.android.effectivenavigation&apos;&#x0A;- Original project: &apos;MainActivity&apos;&#x0A;- Destination element: &apos;EffectiveNavigation/src/com.example.android.effectivenavigation&apos;&#x0A;- Original elements:&#x0A;     com.example.android.effectivenavigation.CollectionDemoActivity.java&#x0A;     com.example.android.effectivenavigation.MainActivity.java" description="Copy compilation units" destination="=EffectiveNavigation/src&lt;com.example.android.effectivenavigation" element1="/src&lt;com.example.android.effectivenavigation{CollectionDemoActivity.java" element2="/src&lt;com.example.android.effectivenavigation{MainActivity.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1407243393592" units="2" version="1.0"/>
+</session>

@@ -45,6 +45,13 @@ import com.example.android.wifidirect.DeviceListFragment.DeviceActionListener;
  * The application should also register a BroadcastReceiver for notification of
  * WiFi state related events.
  */
+
+//THISIS ChannelListener
+/** Interface for callback invocation when framework channel is lost */
+
+//THISIS DeviceActionListener
+/** An interface-callback for the activity to listen to fragment interaction events. (in DeviceListFragment) */
+
 public class WiFiDirectActivity extends Activity implements ChannelListener, DeviceActionListener {
 
     public static final String TAG = "wifidirectdemo";
@@ -138,7 +145,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
                 return true;
 
             case R.id.atn_direct_discover:
-            	//peer 검색 버튼
+            	//THISIS peer 검색 버튼
                 if (!isWifiP2pEnabled) {
                     Toast.makeText(WiFiDirectActivity.this, R.string.p2p_off_warning,
                             Toast.LENGTH_SHORT).show();
@@ -147,7 +154,7 @@ public class WiFiDirectActivity extends Activity implements ChannelListener, Dev
                 final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
                         .findFragmentById(R.id.frag_list);
                 
-                //검색 초기화 -> 이거 눌러야 검색도 되고 다른 디바이스에 찾기도 가능
+                //THISIS 검색 초기화 -> 이거 눌러야 검색도 되고 다른 디바이스에 찾기도 가능
                 fragment.onInitiateDiscovery();
                 
                 manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {

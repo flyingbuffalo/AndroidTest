@@ -50,6 +50,8 @@ import java.net.Socket;
  * A fragment that manages a particular peer and allows interaction with device
  * i.e. setting up network connection and transferring data.
  */
+//THISIS ConnectionInfoListener
+/** Interface for callback invocation when connection info is available */
 public class DeviceDetailFragment extends Fragment implements ConnectionInfoListener {
 
     protected static final int CHOOSE_FILE_RESULT_CODE = 20;
@@ -135,6 +137,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         getActivity().startService(serviceIntent);
     }
 
+    //implement ConnectionInfoListener
+    //peer간 연결되면 호출되는 리스너
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -143,6 +147,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         this.info = info;
         this.getView().setVisibility(View.VISIBLE);
 
+        //THISIS IP주소 등을 받아와서 infoView에 뿌림
         // The owner IP is now known.
         TextView view = (TextView) mContentView.findViewById(R.id.group_owner);
         view.setText(getResources().getString(R.string.group_owner_text)
@@ -156,7 +161,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         // After the group negotiation, we assign the group owner as the file
         // server. The file server is single threaded, single connection server
         // socket.
-        if (info.groupFormed && info.isGroupOwner) {
+        //THISIS 파일 전송 태스크 오픈
+        if (info.groupFormed && info.isGroupOwner) {	/** groupFormed -> Indicates if a p2p group has been successfully formed */
             new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text))
                     .execute();
         } else if (info.groupFormed) {
@@ -200,6 +206,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         view = (TextView) mContentView.findViewById(R.id.status_text);
         view.setText(R.string.empty);
         mContentView.findViewById(R.id.btn_start_client).setVisibility(View.GONE);
+        
         this.getView().setVisibility(View.GONE);
     }
 
@@ -207,6 +214,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
      * A simple server socket that accepts connection and writes some data on
      * the stream.
      */
+    //THISIS 그룹오너 -> open 서버소켓
     public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
 
         private Context context;
