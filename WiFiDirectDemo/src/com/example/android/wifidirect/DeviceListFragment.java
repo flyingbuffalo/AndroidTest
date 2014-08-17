@@ -16,6 +16,9 @@
 
 package com.example.android.wifidirect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -29,12 +32,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A ListFragment that displays available peers on discovery and requests the
@@ -49,12 +50,13 @@ public class DeviceListFragment extends ListFragment implements PeerListListener
     ProgressDialog progressDialog = null;
     View mContentView = null;
     private WifiP2pDevice device;
+    
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.setListAdapter(new WiFiPeerListAdapter(getActivity(), R.layout.row_devices, peers));
-
     }
 
     @Override

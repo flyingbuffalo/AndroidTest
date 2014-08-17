@@ -40,6 +40,7 @@ public class FileTransferService extends IntentService {
      * (non-Javadoc)
      * @see android.app.IntentService#onHandleIntent(android.content.Intent)
      */
+    //클라이언트가 파일 보낼 때
     @Override
     protected void onHandleIntent(Intent intent) {
 
