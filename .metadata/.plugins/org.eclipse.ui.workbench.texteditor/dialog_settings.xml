@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="recv" key="selection"/>
+		<item value="open chat" key="selection"/>
 		<item value="true" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="open chat"/>
 			<item value="recv"/>
 			<item value="FileServerAsyncTask"/>
 			<item value="open chat server task"/>
@@ -15,7 +16,6 @@
 			<item value="FileTransferService"/>
 			<item value="getDeviceStatus"/>
 			<item value="Peer status"/>
-			<item value="Peer status\"/>
 		</list>
 		<list key="replacehistory">
 			<item value="wfdActivity"/>

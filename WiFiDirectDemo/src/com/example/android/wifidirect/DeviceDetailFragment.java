@@ -97,6 +97,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
         chatListAdapater = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
         		chatStringList);
         chatListView.setAdapter(chatListAdapater);
+        chatListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         
         chatStringList.add("Test string");
         chatListAdapater.notifyDataSetChanged();
@@ -181,7 +182,10 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     //peer간 연결되면 호출되는 리스너
     @Override
     public void onConnectionInfoAvailable(final WifiP2pInfo info) {
-        if (progressDialog != null && progressDialog.isShowing()) {
+    	Log.d(WiFiDirectActivity.TAG, "onConnectionInfoAvailable called");
+    	statusText.setText("onConnectionInfoAvailable called");
+    	
+    	if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
         this.info = info;
@@ -242,6 +246,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 	        		Thread readThread = new Thread() {
 	        			@Override
 	        			public void run() {
+	        				Log.d("Socket Thread", "Client Thread Start");
 	        				try {
 	        					
 	        					setStatusString("client: request connection");
@@ -266,6 +271,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		    	            			e.printStackTrace();
 		    	            			setStatusString("connectiong to fail, retry");
 		    	            		}
+		    	            		Thread.sleep(1000);
 		    	            	}
 		    	        		//final Socket socket = new Socket(info.groupOwnerAddress.getHostAddress(), 9190);
 		    	        		Log.d(WiFiDirectActivity.TAG, "client: connect socket");
@@ -277,13 +283,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
 		    	        		
 		        				while(true) {
 		        					try {
-		        						String readStr = reader.readLine();
-		        						
-		        						chatStringList.add(readStr);
-		        				        chatListAdapater.notifyDataSetChanged();
-		        						
-		        				        setStatusString("recv msg" + reader);
-		        				        
+		        						String readStr = reader.readLine();		        						
+		        						uiHandler.sendMessage(Message.obtain(uiHandler, 2, readStr));
 		        						Thread.sleep(100);
 		        						
 		        					} catch(Exception e) {
@@ -305,33 +306,26 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     			Thread serverThread = new Thread() {
     				@Override
     				public void run() {
+    					Log.d("Socket Thread", "Server Thread Start");
     					try {
 		                    ServerSocket serverSocket = new ServerSocket(9190);
 		                    Log.d(WiFiDirectActivity.TAG, "Server: Socket opened");
 		                    setStatusString("server: serversocket opened");
 		                    
 		                    final Socket client = serverSocket.accept();
-		                    statusText.setText("server: connection accept");
+		                    setStatusString("server: connection accept");
 		                    Log.d(WiFiDirectActivity.TAG, "Server: connection done");
 		                    
-		                    chatSendButton.setOnClickListener(new View.OnClickListener() {
-		    					public void onClick(View v) {
-		    						String msg = chatEdtText.getEditableText().toString();
-		    						
-		    						PrintWriter pw;
-		    						try {
-		    							pw = new PrintWriter(client.getOutputStream(), true);
-		    							pw.println(msg);
-		    							pw.flush();
-		    							setStatusString("server: send msg " + msg);
-		    							Log.d(WiFiDirectActivity.TAG, "Server: send msg" + msg);
-		    							chatSendButton.setText("");
-		    							
-		    						} catch(Exception e) {
-		    							e.printStackTrace();
-		    						}
-		    					}
-		    				});
+		                    PrintWriter pw = null;
+    						try {
+    							pw = new PrintWriter(client.getOutputStream(), true);
+    						} catch (IOException e) {
+    							e.printStackTrace();
+    							setStatusString("print writer error!");
+    							return;
+    						}
+		                    
+    						uiHandler.sendMessage(Message.obtain(uiHandler, 1, pw));
 		                    
 		                    
 		                } catch (IOException e) {
@@ -340,6 +334,8 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     				}
     			};
     			serverThread.start();
+    		} else if(msg.what == 2) {
+    			chatEdtText.setText("");
     		}
     	};
     };
@@ -349,6 +345,40 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
     		String str = (String)msg.obj;
     		statusText.setText(str);
         	Log.d("Socket", str);
+    	}
+    };
+    
+    private Handler uiHandler = new Handler() {
+    	public void handleMessage(Message msg) {
+    		if(msg.what == 0) {
+    			chatEdtText.setText("");
+    		} else if (msg.what == 1) {
+    			setStatusString("setOnSendButtonClickListener");
+    			final PrintWriter pw = (PrintWriter)msg.obj;
+    			
+    			chatSendButton.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						String msg = chatEdtText.getEditableText().toString();
+						try {
+							pw.println(msg);
+							pw.flush();
+							setStatusString("server: send msg " + msg);
+							Log.d(WiFiDirectActivity.TAG, "Server: send msg" + msg);
+							chatEdtText.setText("");
+							
+						} catch(Exception e) {
+							e.printStackTrace();
+						}
+					}
+    			});
+    		} else if (msg.what == 2) {
+    			String readStr = (String)msg.obj;
+    			
+				chatStringList.add(readStr);
+		        chatListAdapater.notifyDataSetChanged();
+		        
+		        setStatusString("recv msg : " + readStr);
+    		}
     	}
     };
     
